@@ -19,6 +19,14 @@ public class RelojEtc extends Thread {
     public RelojEtc() {
     }
 
+    public int getHora() {
+        return hora;
+    }
+
+    public void setHora(int hora) {
+        this.hora = hora;
+    }
+
     public JLabel getJlabel1() {
         return jlabel1;
     }
@@ -49,5 +57,7 @@ public class RelojEtc extends Thread {
 
             hora = (hora % 12) + 1;
         }
+        
+        
     }
 }

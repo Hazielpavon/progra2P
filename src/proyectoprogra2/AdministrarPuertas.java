@@ -121,8 +121,10 @@ public class AdministrarPuertas extends Thread {
                 }
                 jLabel1.setVisible(false);
 
-                if (!isopened) {
+                if (pizquierda && pderecha) {
                     meto(puertaFilePath);
+                }else {
+                    
                 }
             }
 

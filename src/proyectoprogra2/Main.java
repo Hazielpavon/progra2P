@@ -20,6 +20,7 @@ import javazoom.jl.player.Player;
 
 public class Main extends javax.swing.JFrame {
 
+    private boolean continuar = false;
     private ArrayList<String> datos = new ArrayList();
     private int night = 0;
     private boolean RightdoorClosed = false;
@@ -31,6 +32,7 @@ public class Main extends javax.swing.JFrame {
     private Bateria b = new Bateria();
     private ArrayList<JLabel> jLabelsList = new ArrayList<>();
     private ArrayList<JButton> botonList = new ArrayList<>();
+    private boolean newgamepressed = false;
 
     public Main() {
         initComponents();
@@ -166,6 +168,7 @@ public class Main extends javax.swing.JFrame {
         jLabel60 = new javax.swing.JLabel();
         jLabel61 = new javax.swing.JLabel();
         jLabel62 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
         LOGIN = new javax.swing.JDialog();
         jPanel2 = new javax.swing.JPanel();
         jLabel58 = new javax.swing.JLabel();
@@ -176,6 +179,7 @@ public class Main extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jLabel55 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jLabel64 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
@@ -187,6 +191,7 @@ public class Main extends javax.swing.JFrame {
         Ds_Extra3 = new javax.swing.JTextField();
         Ds_Extra = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
 
         NewGame.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -524,6 +529,9 @@ public class Main extends javax.swing.JFrame {
         jLabel62.setIcon(new javax.swing.ImageIcon(getClass().getResource("/4ZWZrH (1).gif"))); // NOI18N
         NewGame.getContentPane().add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, -1));
 
+        jLabel63.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wqtbx5bl97311_2.png"))); // NOI18N
+        NewGame.getContentPane().add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
         LOGIN.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
@@ -581,6 +589,9 @@ public class Main extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel64.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
+        jPanel1.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 510, 80, 30));
+
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(0, 0, 0));
         jTextField1.setFont(new java.awt.Font("Consolas", 1, 24)); // NOI18N
@@ -626,6 +637,9 @@ public class Main extends javax.swing.JFrame {
         jTextField5.setBorder(null);
         jTextField5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jTextField5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField5MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jTextField5MouseEntered(evt);
             }
@@ -704,6 +718,14 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ezgif-3-5dfb267f23.gif"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 1130, 700));
 
+        jTextField8.setEditable(false);
+        jTextField8.setBackground(new java.awt.Color(0, 0, 0));
+        jTextField8.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
+        jTextField8.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField8.setText("Nights");
+        jTextField8.setBorder(null);
+        jPanel1.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 146, 44));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 989, -1));
 
         pack();
@@ -728,6 +750,19 @@ public class Main extends javax.swing.JFrame {
     private void jTextField5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField5MouseEntered
         Ds_Extra2.setVisible(true);
         Ds_Extra2.setBackground(new java.awt.Color(0, 0, 0, 1));
+
+        if (b.isPerdio()) {
+            jLabel64.setFont(jTextField8.getFont());
+            jLabel64.setForeground(Color.white);
+            jLabel64.setText("Night " + b.getNight());
+        } else if (!b.isPerdio() && night > 0) {
+            jLabel64.setFont(jTextField8.getFont());
+            jLabel64.setForeground(Color.white);
+            jLabel64.setText("Night " + b.getNight() + 1);
+        } else {
+            jLabel64.setText("");
+        }
+
     }//GEN-LAST:event_jTextField5MouseEntered
 
     private void jTextField5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField5MouseExited
@@ -745,142 +780,310 @@ public class Main extends javax.swing.JFrame {
 
     private void jTextField9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField9MouseClicked
 
-        Object[] options = {"Easy", "Nightmare"};
-        int result = JOptionPane.showOptionDialog(this, "Ingrese una Opcion para la dificultad", "Seleccionar Dificultad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        if (!newgamepressed) {
+            newgamepressed = true;
+            if (b != null && b.isAlive()) {
+                b.interrupt();
+            }
 
-        if (result == 1) {
-            Nightmare = true;
+            Object[] options = {"Easy", "Nightmare"};
+            int result = JOptionPane.showOptionDialog(this, "Ingrese una Opcion para la dificultad", "Seleccionar Dificultad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+            if (result == 1) {
+                Nightmare = true;
+            } else {
+                Nightmare = false;
+            }
+
+            RelojEtc r = new RelojEtc(jLabel18, jTextField2);
+
+            b = new Bateria();
+            b.setDif(Nightmare);
+
+            b.setJlabel1(jLabel54);
+
+            b.setBackground(jLabel4);
+            b.setGameloss(jLabel59);
+            b.setJumpscare(jLabel60);
+            b.setLobbyapagado(jLabel61);
+            b.setEstatica(jLabel62);
+
+            b.setNewGame(NewGame);
+
+            b.start();
+
+            r.start();
+
+            night = 0;
+
+            night++;
+
+            b.setNight(night);
+
+            jLabel19.setForeground(Color.WHITE);
+            jLabel19.setFont(jTextField2.getFont());
+            jLabel19.setText("Night: " + Integer.toString(night));
+
+            jLabelsList.add(jLabel2);
+            jLabelsList.add(jLabel3);
+            jLabelsList.add(jLabel5);
+            jLabelsList.add(jLabel6);
+            jLabelsList.add(jLabel7);
+            jLabelsList.add(jLabel8);
+            jLabelsList.add(jLabel9);
+            jLabelsList.add(jLabel10);
+            jLabelsList.add(jLabel11);
+            jLabelsList.add(jLabel12);
+            jLabelsList.add(jLabel13);
+            jLabelsList.add(jLabel14);
+            jLabelsList.add(jLabel15);
+            jLabelsList.add(jLabel16);
+            jLabelsList.add(jLabel17);
+            jLabelsList.add(jLabel18);
+            jLabelsList.add(jLabel19);
+            jLabelsList.add(jLabel20);
+            jLabelsList.add(jLabel21);
+            jLabelsList.add(jLabel22);
+            jLabelsList.add(jLabel23);
+            jLabelsList.add(jLabel24);
+            jLabelsList.add(jLabel25);
+            jLabelsList.add(jLabel26);
+            jLabelsList.add(jLabel27);
+            jLabelsList.add(jLabel28);
+            jLabelsList.add(jLabel29);
+            jLabelsList.add(jLabel30);
+            jLabelsList.add(jLabel31);
+            jLabelsList.add(jLabel32);
+            jLabelsList.add(jLabel33);
+            jLabelsList.add(jLabel34);
+            jLabelsList.add(jLabel35);
+            jLabelsList.add(jLabel36);
+            jLabelsList.add(jLabel37);
+            jLabelsList.add(jLabel38);
+            jLabelsList.add(jLabel39);
+            jLabelsList.add(jLabel40);
+            jLabelsList.add(jLabel41);
+            jLabelsList.add(jLabel42);
+            jLabelsList.add(jLabel43);
+            jLabelsList.add(jLabel44);
+            jLabelsList.add(jLabel45);
+            jLabelsList.add(jLabel46);
+            jLabelsList.add(jLabel47);
+            jLabelsList.add(jLabel48);
+            jLabelsList.add(jLabel49);
+            jLabelsList.add(jLabel50);
+            jLabelsList.add(jLabel51);
+            jLabelsList.add(jLabel52);
+            jLabelsList.add(jLabel53);
+            jLabelsList.add(jLabel54);
+            jLabelsList.add(jLabel55);
+
+            botonList.add(jButton1);
+            botonList.add(jButton2);
+            botonList.add(jButton3);
+            botonList.add(jButton4);
+
+            botonList.add(Cam1A);
+            botonList.add(Cam1B);
+            botonList.add(Cam1C);
+            botonList.add(Cam2A);
+            botonList.add(Cam2B);
+            botonList.add(Cam4A);
+            botonList.add(Cam4B);
+            botonList.add(Cam3);
+            botonList.add(Cam5);
+            botonList.add(Cam6);
+            botonList.add(Cam7);
+
+            b.setLista(botonList);
+            b.setLsta(jLabelsList);
+
+            try {
+                //Esta es para el music box
+                FileInputStream direccion1 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/fnaf-1-music-box.mp3");
+                Player p = new Player(direccion1);
+                b.setP(p);
+                // esta es para los jumpscares generales 
+                FileInputStream direccion2 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/five-nights-at-freddys-full-scream-sound_2.mp3");
+                Player p2 = new Player(direccion2);
+                b.setJump(p2);
+                // esta es para cuando se va la luz 
+                FileInputStream direccion3 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/powerdown.mp3");
+                Player p3 = new Player(direccion3);
+                b.setBatdone(p3);
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JavaLayerException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            NewGame.pack();
+            NewGame.setModal(true);
+            NewGame.setLocationRelativeTo(this);
+            NewGame.setVisible(true);
+
         } else {
-            Nightmare = false;
+            System.out.println("En el else");
+            jLabel4.setIcon(jLabel63.getIcon());
+            jLabel4.show(true);
+            jLabel2.show(false);
+            jLabel6.show(false);
+            jLabel10.show(true);
+            jLabel14.show(true);
+            jLabel16.show(true);
+            jLabel9.show(true);
+            jLabel47.show(true);
+            jLabel46.show(true);
+            jLabel48.show(true);
+            jLabel19.show(true);
+            jLabel18.show(true);
+            jLabel54.show(true);
+
+            for (JButton buton : botonList) {
+                buton.setVisible(true);
+            }
+            if (b != null && b.isAlive()) {
+                b.interrupt();
+            }
+
+            Object[] options = {"Easy", "Nightmare"};
+            int result = JOptionPane.showOptionDialog(this, "Ingrese una Opcion para la dificultad", "Seleccionar Dificultad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+            if (result == 1) {
+                Nightmare = true;
+            } else {
+                Nightmare = false;
+            }
+
+            RelojEtc r = new RelojEtc(jLabel18, jTextField2);
+
+            b = new Bateria();
+            b.setDif(Nightmare);
+
+            b.setJlabel1(jLabel54);
+
+            b.setBackground(jLabel4);
+            b.setGameloss(jLabel59);
+            b.setJumpscare(jLabel60);
+            b.setLobbyapagado(jLabel61);
+            b.setEstatica(jLabel62);
+
+            b.setNewGame(NewGame);
+
+            b.start();
+
+            r.start();
+
+            night = 0;
+
+            night++;
+
+            b.setNight(night);
+
+            jLabel19.setForeground(Color.WHITE);
+            jLabel19.setFont(jTextField2.getFont());
+            jLabel19.setText("Night: " + Integer.toString(night));
+
+            jLabelsList.add(jLabel2);
+            jLabelsList.add(jLabel3);
+            jLabelsList.add(jLabel5);
+            jLabelsList.add(jLabel6);
+            jLabelsList.add(jLabel7);
+            jLabelsList.add(jLabel8);
+            jLabelsList.add(jLabel9);
+            jLabelsList.add(jLabel10);
+            jLabelsList.add(jLabel11);
+            jLabelsList.add(jLabel12);
+            jLabelsList.add(jLabel13);
+            jLabelsList.add(jLabel14);
+            jLabelsList.add(jLabel15);
+            jLabelsList.add(jLabel16);
+            jLabelsList.add(jLabel17);
+            jLabelsList.add(jLabel18);
+            jLabelsList.add(jLabel19);
+            jLabelsList.add(jLabel20);
+            jLabelsList.add(jLabel21);
+            jLabelsList.add(jLabel22);
+            jLabelsList.add(jLabel23);
+            jLabelsList.add(jLabel24);
+            jLabelsList.add(jLabel25);
+            jLabelsList.add(jLabel26);
+            jLabelsList.add(jLabel27);
+            jLabelsList.add(jLabel28);
+            jLabelsList.add(jLabel29);
+            jLabelsList.add(jLabel30);
+            jLabelsList.add(jLabel31);
+            jLabelsList.add(jLabel32);
+            jLabelsList.add(jLabel33);
+            jLabelsList.add(jLabel34);
+            jLabelsList.add(jLabel35);
+            jLabelsList.add(jLabel36);
+            jLabelsList.add(jLabel37);
+            jLabelsList.add(jLabel38);
+            jLabelsList.add(jLabel39);
+            jLabelsList.add(jLabel40);
+            jLabelsList.add(jLabel41);
+            jLabelsList.add(jLabel42);
+            jLabelsList.add(jLabel43);
+            jLabelsList.add(jLabel44);
+            jLabelsList.add(jLabel45);
+            jLabelsList.add(jLabel46);
+            jLabelsList.add(jLabel47);
+            jLabelsList.add(jLabel48);
+            jLabelsList.add(jLabel49);
+            jLabelsList.add(jLabel50);
+            jLabelsList.add(jLabel51);
+            jLabelsList.add(jLabel52);
+            jLabelsList.add(jLabel53);
+            jLabelsList.add(jLabel54);
+            jLabelsList.add(jLabel55);
+
+            botonList.add(jButton1);
+            botonList.add(jButton2);
+            botonList.add(jButton3);
+            botonList.add(jButton4);
+
+            botonList.add(Cam1A);
+            botonList.add(Cam1B);
+            botonList.add(Cam1C);
+            botonList.add(Cam2A);
+            botonList.add(Cam2B);
+            botonList.add(Cam4A);
+            botonList.add(Cam4B);
+            botonList.add(Cam3);
+            botonList.add(Cam5);
+            botonList.add(Cam6);
+            botonList.add(Cam7);
+
+            b.setLista(botonList);
+            b.setLsta(jLabelsList);
+
+            try {
+                //Esta es para el music box
+                FileInputStream direccion1 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/fnaf-1-music-box.mp3");
+                Player p = new Player(direccion1);
+                b.setP(p);
+                // esta es para los jumpscares generales 
+                FileInputStream direccion2 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/five-nights-at-freddys-full-scream-sound_2.mp3");
+                Player p2 = new Player(direccion2);
+                b.setJump(p2);
+                // esta es para cuando se va la luz 
+                FileInputStream direccion3 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/powerdown.mp3");
+                Player p3 = new Player(direccion3);
+                b.setBatdone(p3);
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JavaLayerException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            NewGame.pack();
+            NewGame.setModal(true);
+            NewGame.setLocationRelativeTo(this);
+            NewGame.setVisible(true);
         }
-
-        RelojEtc r = new RelojEtc(jLabel18, jTextField2);
-
-        b.setDif(Nightmare);
-
-        b.setJlabel1(jLabel54);
-
-        b.setBackground(jLabel4);
-        b.setGameloss(jLabel59);
-        b.setJumpscare(jLabel60);
-        b.setLobbyapagado(jLabel61);
-        b.setEstatica(jLabel62);
-
-        b.setNewGame(NewGame);
-
-        b.start();
-
-        r.start();
-
-        night = 0;
-
-        night++;
-
-        b.setNight(night);
-
-        jLabel19.setForeground(Color.WHITE);
-        jLabel19.setFont(jTextField2.getFont());
-        jLabel19.setText("Night: " + Integer.toString(night));
-
-        jLabelsList.add(jLabel2);
-        jLabelsList.add(jLabel3);
-        jLabelsList.add(jLabel5);
-        jLabelsList.add(jLabel6);
-        jLabelsList.add(jLabel7);
-        jLabelsList.add(jLabel8);
-        jLabelsList.add(jLabel9);
-        jLabelsList.add(jLabel10);
-        jLabelsList.add(jLabel11);
-        jLabelsList.add(jLabel12);
-        jLabelsList.add(jLabel13);
-        jLabelsList.add(jLabel14);
-        jLabelsList.add(jLabel15);
-        jLabelsList.add(jLabel16);
-        jLabelsList.add(jLabel17);
-        jLabelsList.add(jLabel18);
-        jLabelsList.add(jLabel19);
-        jLabelsList.add(jLabel20);
-        jLabelsList.add(jLabel21);
-        jLabelsList.add(jLabel22);
-        jLabelsList.add(jLabel23);
-        jLabelsList.add(jLabel24);
-        jLabelsList.add(jLabel25);
-        jLabelsList.add(jLabel26);
-        jLabelsList.add(jLabel27);
-        jLabelsList.add(jLabel28);
-        jLabelsList.add(jLabel29);
-        jLabelsList.add(jLabel30);
-        jLabelsList.add(jLabel31);
-        jLabelsList.add(jLabel32);
-        jLabelsList.add(jLabel33);
-        jLabelsList.add(jLabel34);
-        jLabelsList.add(jLabel35);
-        jLabelsList.add(jLabel36);
-        jLabelsList.add(jLabel37);
-        jLabelsList.add(jLabel38);
-        jLabelsList.add(jLabel39);
-        jLabelsList.add(jLabel40);
-        jLabelsList.add(jLabel41);
-        jLabelsList.add(jLabel42);
-        jLabelsList.add(jLabel43);
-        jLabelsList.add(jLabel44);
-        jLabelsList.add(jLabel45);
-        jLabelsList.add(jLabel46);
-        jLabelsList.add(jLabel47);
-        jLabelsList.add(jLabel48);
-        jLabelsList.add(jLabel49);
-        jLabelsList.add(jLabel50);
-        jLabelsList.add(jLabel51);
-        jLabelsList.add(jLabel52);
-        jLabelsList.add(jLabel53);
-        jLabelsList.add(jLabel54);
-        jLabelsList.add(jLabel55);
-
-        botonList.add(jButton1);
-        botonList.add(jButton2);
-        botonList.add(jButton3);
-        botonList.add(jButton4);
-
-        botonList.add(Cam1A);
-        botonList.add(Cam1B);
-        botonList.add(Cam1C);
-        botonList.add(Cam2A);
-        botonList.add(Cam2B);
-        botonList.add(Cam4A);
-        botonList.add(Cam4B);
-        botonList.add(Cam3);
-        botonList.add(Cam5);
-        botonList.add(Cam6);
-        botonList.add(Cam7);
-
-        b.setLista(botonList);
-        b.setLsta(jLabelsList);
-
-        try {
-            //Esta es para el music box
-            FileInputStream direccion1 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/fnaf-1-music-box.mp3");
-            Player p = new Player(direccion1);
-            b.setP(p);
-            // esta es para los jumpscares generales 
-            FileInputStream direccion2 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/five-nights-at-freddys-full-scream-sound_2.mp3");
-            Player p2 = new Player(direccion2);
-            b.setJump(p2);
-            // esta es para cuando se va la luz 
-            FileInputStream direccion3 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/powerdown.mp3");
-            Player p3 = new Player(direccion3);
-            b.setBatdone(p3);
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JavaLayerException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        NewGame.pack();
-        NewGame.setModal(true);
-        NewGame.setLocationRelativeTo(this);
-        NewGame.setVisible(true);
-
 
     }//GEN-LAST:event_jTextField9MouseClicked
 
@@ -888,7 +1091,7 @@ public class Main extends javax.swing.JFrame {
 
         AdministrarPuertas ap = new AdministrarPuertas(jLabel2, jLabel3, jLabel5, jLabel28, cont, null, null, null, null);
 
-        if (!b.isPerdio()) {
+        if (!b.isPerdio() || continuar) {
             if (!monitorOpen) {
 
                 if (cont % 2 != 0) {
@@ -903,15 +1106,12 @@ public class Main extends javax.swing.JFrame {
                         jLabel15.setVisible(true);
                         jLabel25.setVisible(false);
                     }
-
+                    ap.setPderecha(true);
                     ap.start();
-
 
                 } else {
 
                     ap.start();
-
-                    
 
                     RightdoorClosed = false;
                     jLabel14.show(true);
@@ -935,7 +1135,7 @@ public class Main extends javax.swing.JFrame {
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
 
         AdministrarPuertas ap = new AdministrarPuertas(jLabel6, jLabel7, jLabel8, jLabel29, cont2, null, null, null, null);
-        if (!b.isPerdio()) {
+        if (!b.isPerdio() || continuar) {
             if (!monitorOpen) {
                 if (cont2 % 2 != 0) {
                     LeftdoorClosed = true;
@@ -951,6 +1151,7 @@ public class Main extends javax.swing.JFrame {
                     }
                     ap.start();
                 } else {
+                    ap.setPizquierda(true);
                     ap.start();
                     LeftdoorClosed = false;
                     jLabel16.setVisible(true);
@@ -977,7 +1178,7 @@ public class Main extends javax.swing.JFrame {
 
         AdministrarPuertas ap = new AdministrarPuertas(jLabel11, jLabel12, jLabel13, jLabel30, cont3, jLabel27, jLabel23, jLabel31, jLabel42);
 
-        if (!b.isPerdio()) {
+        if (!b.isPerdio() || continuar) {
             if (cont3 % 2 != 0) {
                 ap.setIsopened(true);
                 ap.start();
@@ -1009,7 +1210,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
 
-        if (!b.isPerdio()) {
+        if (!b.isPerdio() || continuar) {
             if (!monitorOpen) {
                 if (!RightdoorClosed) {
                     if (cont4 % 2 != 0) {
@@ -1042,7 +1243,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        if (!b.isPerdio()) {
+        if (!b.isPerdio() || continuar) {
             if (!monitorOpen) {
                 if (!LeftdoorClosed) {
                     if (cont5 % 2 != 0) {
@@ -1203,6 +1404,243 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTextField6KeyPressed
 
+    private void jTextField5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField5MouseClicked
+
+        Bateria b2 = new Bateria();
+        continuar = true;
+        jLabelsList.add(jLabel2);
+        jLabelsList.add(jLabel3);
+        jLabelsList.add(jLabel5);
+        jLabelsList.add(jLabel6);
+        jLabelsList.add(jLabel7);
+        jLabelsList.add(jLabel8);
+        jLabelsList.add(jLabel9);
+        jLabelsList.add(jLabel10);
+        jLabelsList.add(jLabel11);
+        jLabelsList.add(jLabel12);
+        jLabelsList.add(jLabel13);
+        jLabelsList.add(jLabel14);
+        jLabelsList.add(jLabel15);
+        jLabelsList.add(jLabel16);
+        jLabelsList.add(jLabel17);
+        jLabelsList.add(jLabel18);
+        jLabelsList.add(jLabel19);
+        jLabelsList.add(jLabel20);
+        jLabelsList.add(jLabel21);
+        jLabelsList.add(jLabel22);
+        jLabelsList.add(jLabel23);
+        jLabelsList.add(jLabel24);
+        jLabelsList.add(jLabel25);
+        jLabelsList.add(jLabel26);
+        jLabelsList.add(jLabel27);
+        jLabelsList.add(jLabel28);
+        jLabelsList.add(jLabel29);
+        jLabelsList.add(jLabel30);
+        jLabelsList.add(jLabel31);
+        jLabelsList.add(jLabel32);
+        jLabelsList.add(jLabel33);
+        jLabelsList.add(jLabel34);
+        jLabelsList.add(jLabel35);
+        jLabelsList.add(jLabel36);
+        jLabelsList.add(jLabel37);
+        jLabelsList.add(jLabel38);
+        jLabelsList.add(jLabel39);
+        jLabelsList.add(jLabel40);
+        jLabelsList.add(jLabel41);
+        jLabelsList.add(jLabel42);
+        jLabelsList.add(jLabel43);
+        jLabelsList.add(jLabel44);
+        jLabelsList.add(jLabel45);
+        jLabelsList.add(jLabel46);
+        jLabelsList.add(jLabel47);
+        jLabelsList.add(jLabel48);
+        jLabelsList.add(jLabel49);
+        jLabelsList.add(jLabel50);
+        jLabelsList.add(jLabel51);
+        jLabelsList.add(jLabel52);
+        jLabelsList.add(jLabel53);
+        jLabelsList.add(jLabel54);
+        jLabelsList.add(jLabel55);
+
+        botonList.add(jButton1);
+        botonList.add(jButton2);
+        botonList.add(jButton3);
+        botonList.add(jButton4);
+
+        botonList.add(Cam1A);
+        botonList.add(Cam1B);
+        botonList.add(Cam1C);
+        botonList.add(Cam2A);
+        botonList.add(Cam2B);
+        botonList.add(Cam4A);
+        botonList.add(Cam4B);
+        botonList.add(Cam3);
+        botonList.add(Cam5);
+        botonList.add(Cam6);
+        botonList.add(Cam7);
+
+        b2.setLista(botonList);
+        b2.setLsta(jLabelsList);
+
+        if (night != 0) {
+            if (b2.isPerdio()) {
+
+                b2.setPerdio(false);
+
+                RelojEtc r = new RelojEtc(jLabel18, jTextField2);
+
+                b2.setDif(b2.isDif());
+                r.setHora(11);
+                night = b2.getNight();
+                b2.setBatte(5);
+
+                jLabel54.setText(Integer.toString(b2.getBatte()));
+
+                b2.setJlabel1(jLabel54);
+                b2.setDif(Nightmare);
+                b2.setJlabel1(jLabel54);
+                b2.setBackground(jLabel4);
+
+                b2.setGameloss(jLabel59);
+                b2.setJumpscare(jLabel60);
+                b2.setLobbyapagado(jLabel61);
+                b2.setEstatica(jLabel62);
+                b2.setNewGame(NewGame);
+
+                r.start();
+
+                jLabel19.setForeground(Color.WHITE);
+                jLabel19.setFont(jTextField2.getFont());
+                jLabel19.setText("Night: " + Integer.toString(night));
+
+                jLabel4.setIcon(jLabel63.getIcon());
+                jLabel4.show(true);
+                jLabel2.show(false);
+                jLabel6.show(false);
+                jLabel10.show(true);
+                jLabel14.show(true);
+                jLabel16.show(true);
+                jLabel9.show(true);
+                jLabel47.show(true);
+                jLabel46.show(true);
+                jLabel48.show(true);
+                jLabel19.show(true);
+                jLabel18.show(true);
+                jLabel54.show(true);
+
+                for (JButton buton : botonList) {
+                    buton.setVisible(true);
+                }
+                try {
+                    //Esta es para el music box
+                    FileInputStream direccion1 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/fnaf-1-music-box.mp3");
+                    Player p = new Player(direccion1);
+                    b2.setP(p);
+                    // esta es para los jumpscares generales 
+                    FileInputStream direccion2 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/five-nights-at-freddys-full-scream-sound_2.mp3");
+                    Player p2 = new Player(direccion2);
+                    b2.setJump(p2);
+                    // esta es para cuando se va la luz 
+                    FileInputStream direccion3 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/powerdown.mp3");
+                    Player p3 = new Player(direccion3);
+                    b2.setBatdone(p3);
+
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Main.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
+                } catch (JavaLayerException ex) {
+                    Logger.getLogger(Main.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+
+                NewGame.pack();
+                NewGame.setModal(true);
+                NewGame.setLocationRelativeTo(this);
+                NewGame.setVisible(true);
+            } else {
+
+                b2.setPerdio(false);
+                RelojEtc r = new RelojEtc(jLabel18, jTextField2);
+
+                b2.setDif(b2.isDif());
+                r.setHora(12);
+                night = b2.getNight() + 1;
+
+                b2.setBatte(5);
+
+                jLabel54.setText(Integer.toString(b2.getBatte()));
+
+                b2.setJlabel1(jLabel54);
+                b2.setDif(Nightmare);
+                b2.setJlabel1(jLabel54);
+                b2.setBackground(jLabel4);
+                b2.setNight(night);
+
+                b2.setGameloss(jLabel59);
+                b2.setJumpscare(jLabel60);
+                b2.setLobbyapagado(jLabel61);
+                b2.setEstatica(jLabel62);
+                b2.setNewGame(NewGame);
+
+                r.start();
+
+                jLabel19.setForeground(Color.WHITE);
+                jLabel19.setFont(jTextField2.getFont());
+                jLabel19.setText("Night: " + Integer.toString(night));
+
+                jLabel4.setIcon(jLabel63.getIcon());
+                jLabel4.show(true);
+                jLabel2.show(false);
+                jLabel6.show(false);
+                jLabel10.show(true);
+                jLabel14.show(true);
+                jLabel16.show(true);
+                jLabel9.show(true);
+                jLabel47.show(true);
+                jLabel46.show(true);
+                jLabel48.show(true);
+                jLabel19.show(true);
+                jLabel18.show(true);
+                jLabel54.show(true);
+
+                for (JButton buton : botonList) {
+                    buton.setVisible(true);
+                }
+                try {
+                    //Esta es para el music box
+                    FileInputStream direccion1 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/fnaf-1-music-box.mp3");
+                    Player p = new Player(direccion1);
+                    b2.setP(p);
+                    // esta es para los jumpscares generales 
+                    FileInputStream direccion2 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/five-nights-at-freddys-full-scream-sound_2.mp3");
+                    Player p2 = new Player(direccion2);
+                    b2.setJump(p2);
+                    // esta es para cuando se va la luz 
+                    FileInputStream direccion3 = new FileInputStream("C:/Users/Administrador/Downloads/PropyectoP2-master/PropyectoP2-master/src/proyectoprogra2/powerdown.mp3");
+                    Player p3 = new Player(direccion3);
+                    b2.setBatdone(p3);
+
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Main.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
+                } catch (JavaLayerException ex) {
+                    Logger.getLogger(Main.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+                b.stop();
+                b2.start();
+                NewGame.pack();
+                NewGame.setModal(true);
+                NewGame.setLocationRelativeTo(this);
+                NewGame.setVisible(true);
+            }
+
+        }
+
+    }//GEN-LAST:event_jTextField5MouseClicked
+
     public static void main(String args[]) {
 
         /* Set the Nimbus look and feel */
@@ -1288,9 +1726,6 @@ public class Main extends javax.swing.JFrame {
 
         return contv;
     }
-
-    
-    
 
     private int cont = 1;
     private int cont3 = 1;
@@ -1381,6 +1816,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1394,6 +1831,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }

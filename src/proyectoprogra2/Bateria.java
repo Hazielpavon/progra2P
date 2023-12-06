@@ -34,6 +34,9 @@ public class Bateria extends Thread {
     private Player p;
     private Player jump;
     private Player batdone;
+    private boolean continuegame;
+    
+    
 
     public Bateria(JLabel gameloss, JLabel jumpscare, JLabel background) {
         this.gameloss = gameloss;
@@ -42,6 +45,14 @@ public class Bateria extends Thread {
     }
 
     public Bateria() {
+    }
+
+    public boolean isContinuegame() {
+        return continuegame;
+    }
+
+    public void setContinuegame(boolean continuegame) {
+        this.continuegame = continuegame;
     }
 
     public Player getJump() {
@@ -141,6 +152,7 @@ public class Bateria extends Thread {
     }
 
     public boolean isDif() {
+
         return dif;
     }
 
@@ -206,7 +218,7 @@ public class Bateria extends Thread {
 
     @Override
     public void run() {
-        while (batte > 0) {
+        while (!perdio) {
 
             if (night == 1) {
                 vali();
@@ -277,7 +289,7 @@ public class Bateria extends Thread {
                 }
             }
             if (batte < 0 || batte == 0) {
-                perdio = true;
+
                 for (JLabel label : lsta) {
                     label.setVisible(false);
                 }
@@ -322,6 +334,7 @@ public class Bateria extends Thread {
 
                                 } finally {
                                     NewGame.show(false);
+                                    perdio = true;
                                 }
                             }
                         }
